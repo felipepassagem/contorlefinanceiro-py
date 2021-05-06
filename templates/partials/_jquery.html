@@ -1,0 +1,72 @@
+<!--
+<script>
+    $(document).ready(Charts)
+
+    function Charts() {
+        $.ajax({
+            url: window.location.pathname,
+            success: function(response) {
+                myChart(response['chart_data']);
+                myChart2(response['chart_data']);
+            },
+            complete: function() {
+                setTimeout(Charts, 3000000)
+            }
+        })
+    }
+</script>
+<script>
+    function myChart(data) {
+        console.log(data)
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var barChart = new Chart(ctx, {
+            type: "doughnut",
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: "Categorias com maiores gastos no mês",
+                    fontSize: 20
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+    function myChart2(data) {
+        console.log(data)
+        var ctx = document.getElementById("myChart2").getContext('2d');
+        var barChart = new Chart(ctx, {
+            type: "bar",
+            data: data,
+            options: {
+                label: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: "Categorias com maiores gastos no mês",
+                    fontSize: 20
+                }
+            }
+        });
+    }
+</script>
+-->

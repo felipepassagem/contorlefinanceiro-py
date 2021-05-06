@@ -1,0 +1,337 @@
+{% extends 'layout.html' %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<body id="page-top">
+
+    {% block content %} {% include 'partials/_navbar.html' %}
+
+    <!-- About-->
+    <div class="row" id="cards">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body bg-success" id="card-income">
+                    <h5 class="card-title">Income</h5>
+                    <p class="card-text text-dark">{{ total_income }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body bg-danger" id="card-outcome">
+                    <h5 class="card-title">Outcome</h5>
+                    <p class="card-text text-dark">{{ total_outcome }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body bg-light" id="card-balance">
+                    <h5 class="card-title">Balance</h5>
+                    <p class="card-text text-dark">{{ balance }}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <section class="resume-section" id="about">
+        <div class="resume-section-content">
+            <h3 class="mb-0">
+                Este mês:
+                <span class="text-primary">{{ date }}</span>
+            </h3>
+            <section class="resume-section pt-0" id="interests">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 d-flex justify-content-center pr-4">
+                            <div class="card my-auto" style="width: 18rem;">
+                                <div class="card-header">
+                                    Monthly values
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-success">Income: {{total_income_month}}</li>
+                                    <li class="list-group-item text-danger">Outcome: {{total_outcome_month}}</li>
+                                    <li class="list-group-item text-warning">Balance: {{ balance_month }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md d-flex justify-content-center">
+                            <div id="myFirstchart-container">{{ output|safe }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-3 d-flex justify-content-center">
+                                <div class="card my-auto" style="width: 18rem;">
+                                    <div class="card-header">
+                                        Yearly values
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item text-success">Income: {{ year_income }}</li>
+                                        <li class="list-group-item text-danger">Outcome: {{ year_outcome }}</li>
+                                        <li class="list-group-item text-warning">Balance: {{ year_balance }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md d-flex justify-content-center">
+                                <div id="sec-container">{{ output2|safe }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </section>
+    <hr class="mb-0" />
+    <!-- Education-->
+    <section class="resume-section" id="education">
+        <div class="resume-section-content">
+            <h2 class="mb-5">Custom</h2>
+            <section class="resume-section pt-0" id="interests">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 d-flex justify-content-center">
+                            <div class="col-xs-2">
+                                <form action="{% url 'index'%}" method="">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="date" class="form-label">Data inicial</label>
+                                        <input type="date" class="form-control" id="date" name="date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date1" class="form-label">Data final</label>
+                                        <input type="date" class="form-control" id="date1" name="date1" required>
+                                    </div>
+
+                                    <button type="button" class="btn btn-info" id="btn">Submit</button>
+                                </form>
+                                <div class="card my-auto" style="width: 18rem;">
+                                    <div class="card-header" id="card-header">
+
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li id="li1" class="list-group-item text-success">Income: </li>
+                                        <li id="li2" class="list-group-item text-danger">Outcome: </li>
+                                        <li id="li3" class="list-group-item text-warning">Balance:</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col">
+                            <div class="col-md d-flex justify-content-center">
+                                <div id="tri-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container pt-5">
+                        <div class="row justify-content-center">
+
+                            <div id="table-style" style="overflow:scroll;height:400px;width:80%;overflow:auto">
+                                <table id="table" class="table table-striped table-fixed">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Categoria</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Observação</th>
+                                            <th scope="col">Data</th>
+                                            <th scope="col">Entrada/Saída</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </div>
+        </section>
+        <hr class="m-0" />
+        <div class="container">
+            <div class="row">
+
+            </div>
+        </div>
+        </div>
+        {% endblock%} {% block script %}
+
+        <script>
+            $("#btn").click(function() {
+                var date = $("#date").val();
+                var date1 = $("#date1").val();
+                var resp;
+
+                $.ajax({
+                    url: ' ',
+                    type: 'get',
+                    data: {
+                        'date': date,
+                        'date1': date1
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+
+                        $("#card-header").text(date + " - " + date1)
+                        $("#li1").text("Income: " + response.card[0])
+                        $("#li2").text("Outcome: " + response.card[1])
+                        $("#li3").text("Balance: " + response.card[2])
+
+
+                        var chartProperties = {
+                            "caption": "Product-wise quarterly revenue Vs profit in last year",
+                            "subCaption": "Harry's SuperMart",
+                            "xAxisname": "Quarter",
+                            "yAxisName": "Login Total",
+                            "paletteColors": "#e60b0b,#0be60b",
+                            "bgColor": "#ffffff",
+                            "borderAlpha": "20",
+                            "showCanvasBorder": "0",
+                            "usePlotGradientColor": "0",
+                            "plotBorderAlpha": "10",
+                            "legendBorderAlpha": "0",
+                            "legendShadow": "0",
+                            "legendBgAlpha": "0",
+                            "valueFontColor": "#ffffff",
+                            "showXAxisLine": "1",
+                            "xAxisLineColor": "#999999",
+                            "divlineColor": "#999999",
+                            "divLineDashed": "1",
+                            "showAlternateHGridColor": "0",
+                            "subcaptionFontBold": "0",
+                            "subcaptionFontSize": "14",
+                            "showHoverEffect": "1"
+                        };
+
+                        var chart = new FusionCharts({
+                            type: "mscolumn2d",
+                            renderAt: "tri-container",
+                            width: "600",
+                            height: "500",
+                            dataFormat: "json",
+                            /*dataSource: response.data,*/
+                            dataSource: {
+                                "chart": response.data["chart"],
+                                "categories": [{
+                                    "category": [{
+                                        "label": response.data_in["category"][0]
+                                    }, {
+                                        "label": response.data_in["category"][1]
+                                    }, {
+                                        "label": response.data_in["category"][2]
+                                    }, {
+                                        "label": response.data_in["category"][3]
+                                    }, {
+                                        "label": response.data_in["category"][4]
+                                    }, {
+                                        "label": response.data_in["category"][5]
+                                    }]
+                                }],
+                                "dataset": [{
+                                    "seriesname": "Outcome",
+                                    "data": [{
+                                        "value": response.data["data"][0],
+                                        "color": "#bd251a"
+                                    }, {
+                                        "value": response.data["data"][1],
+                                        "color": "#bd251a"
+                                    }, {
+                                        "value": response.data["data"][2],
+                                        "color": "#bd251a"
+                                    }, {
+                                        "value": response.data["data"][3],
+                                        "color": "#bd251a"
+                                    }, {
+                                        "value": response.data["data"][4],
+                                        "color": "#bd251a"
+                                    }, {
+                                        "value": response.data["data"][5],
+                                        "color": "#bd251a"
+                                    }]
+                                }, {
+                                    "seriesname": "Income",
+                                    "data": [{
+                                        "value": response.data_in["data"][0],
+                                        "color": "#2a9c05"
+                                    }, {
+                                        "value": response.data_in["data"][1],
+                                        "color": "#2a9c05"
+                                    }, {
+                                        "value": response.data_in["data"][2],
+                                        "color": "#2a9c05"
+                                    }, {
+                                        "value": response.data_in["data"][3],
+                                        "color": "#2a9c05"
+                                    }, {
+                                        "value": response.data_in["data"][4],
+                                        "color": "#2a9c05"
+                                    }, {
+                                        "value": response.data_in["data"][5],
+                                        "color": "#2a9c05"
+                                    }]
+                                }],
+                                "trendlines": [{
+                                    "line": [{
+                                        "startvalue": "0",
+                                        "color": "#e60b0b",
+                                        "displayvalue": "",
+                                        "valueOnRight": "1",
+                                        "thickness": "1",
+                                        "showBelow": "1",
+
+                                    }, {
+                                        "startvalue": "0",
+                                        "color": "#0be60b",
+                                        "displayvalue": "",
+                                        "valueOnRight": "1",
+                                        "thickness": "1",
+                                        "showBelow": "1",
+
+                                    }]
+                                }]
+                            },
+
+                        });
+                        chart.render();
+                        $("#tbody").empty();
+                        for (var i = 0; i <= response.tabledata.length; i++) {
+                            $("#tbody").append('<tr> <th>' + response.tabledata[i][5] + '</th> <th scope="row">' + response.tabledata[i][0] + '</th> <th>' + response.tabledata[i][1] + '</th> <th>' + response.tabledata[i][2] + '</th> <th>' + response.tabledata[i][3] + '</th> <th>' + response.tabledata[i][4] + '<th> </tr>')
+                        };
+                        resp = response
+                        console.log(resp)
+                        return resp
+                    },
+                });
+            });
+        </script>
+
+
+        <script>
+        </script>
+        {% endblock %}
+
+
+
+
+</body>
+
+</html>
+
+<!--
+
+    {
+                                "label": response[0][0],
+                                "value": response[0][1]
+                            }, {
+                                "label": response[1][0],
+                                "value": response[1][1]
+                            }, {
+                                "label": response[2][0],
+                                "value": response[2][1]
+                            }
+-->
